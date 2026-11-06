@@ -1,23 +1,20 @@
-# Poster Playground
+# Poster Playground v2.0
 
-A neo-brutalist poster-making web app built with vanilla HTML, CSS and JavaScript.
+A browser-based experimental poster studio built with vanilla HTML, CSS and JavaScript.
 
 ## Features
-- Live editable poster preview
-- Headline, subtitle and microcopy controls
-- Four colour palettes
-- Three compositions
-- Three type styles
-- Four graphic element choices
-- Border, grain and ink controls
-- Random composition generator
-- PNG export at 1080 × 1350
+- 16 colour palettes
+- 8 quick-start design presets
+- 8 compositions and 3 text alignments
+- 7 typefaces and 4 headline sizes
+- 8 graphic treatments and 5 textures
+- Editable headline, subtitle, kicker and microcopy
+- Border, colour inversion and footer toggles
+- Randomise and 1080 × 1350 PNG export
+- Responsive layout for desktop and mobile
 
 ## Run locally
-Open `index.html` in a browser. No build step or dependencies are required.
+Open `index.html` in a browser. No build tools or dependencies are required. Google Fonts are loaded online; fallback fonts are used if offline.
 
 ## Publish with GitHub Pages
-Create a public repository named `poster-playground`, upload `index.html`, `style.css`, and `script.js` to the repository root, then enable **Settings → Pages → Deploy from a branch → main → /(root)**.
-
-## Built with
-HTML · CSS · Vanilla JavaScript · Canvas API
+Upload/replace `index.html`, `style.css`, `script.js` and `README.md` in the root of your `poster-playground` repository. Commit the changes. Keep GitHub Pages set to deploy from `main` and `/(root)`.

@@ -1,90 +1,30 @@
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const poster = $("poster");
-  const headline = $("headline"), subtitle = $("subtitle"), microcopy = $("microcopy");
-  const palettes = [
-    {bg:"#f4b8d2",ink:"#171717",accent:"#3457e8",paper:"#fff8eb"},
-    {bg:"#3457e8",ink:"#fff8eb",accent:"#ff8b45",paper:"#fff5df"},
-    {bg:"#f5df4d",ink:"#171717",accent:"#f04e37",paper:"#fff8eb"},
-    {bg:"#bcb4f5",ink:"#171717",accent:"#d5f28c",paper:"#fff8eb"}
-  ];
-  let paletteIndex = 0, layout = "stack";
-  function update() {
-    $("posterHeadline").innerHTML = escapeHTML(headline.value).replace(/\n/g,"<br>");
-    $("posterSubtitle").textContent = subtitle.value;
-    $("posterMicro").textContent = microcopy.value;
-    poster.classList.toggle("no-border", !$("borderToggle").checked);
-    poster.classList.toggle("no-grain", !$("grainToggle").checked);
-    poster.classList.toggle("ink-invert", $("inkToggle").checked);
-    poster.classList.toggle("font-grotesk", $("fontChoice").value === "grotesk");
-    poster.classList.toggle("font-mono", $("fontChoice").value === "mono");
-    poster.classList.remove("layout-stack","layout-split","layout-center");
-    poster.classList.add("layout-"+layout);
-    const shape = $("shapeChoice").value;
-    $("posterShape").className = "poster-shape " + (shape==="circle"?"shape-circle":shape==="bars"?"shape-bars":"shape-star");
-    $("posterShape").textContent = shape==="star"?"✳":"";
-    $("posterShape").style.display = shape==="none"?"none":"block";
-    const c = palettes[paletteIndex];
-    poster.style.backgroundColor = c.bg;
-    poster.style.color = c.ink;
-    poster.style.setProperty("--blue", c.accent);
-    poster.style.setProperty("--ink", $("inkToggle").checked ? c.paper : c.ink);
-    document.querySelectorAll(".palette").forEach((b,i)=>b.classList.toggle("active",i===paletteIndex));
-    document.querySelectorAll(".choice").forEach(b=>b.classList.toggle("active",b.dataset.layout===layout));
-  }
-  function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-  [headline,subtitle,microcopy,$("fontChoice"),$("shapeChoice"),$("borderToggle"),$("grainToggle"),$("inkToggle")].forEach(el=>el.addEventListener("input",update));
-  $("palettes").addEventListener("click",e=>{const b=e.target.closest("[data-palette]");if(!b)return;paletteIndex=Number(b.dataset.palette);update();});
-  $("layouts").addEventListener("click",e=>{const b=e.target.closest("[data-layout]");if(!b)return;layout=b.dataset.layout;update();});
-  function randomise(){
-    const words=[["THINK","BIGGER"],["MAKE","SOME NOISE"],["STAY","CURIOUS"],["IDEAS","IN MOTION"],["NOTHING","ORDINARY"],["CREATE","MORE"]];
-    const pick=words[Math.floor(Math.random()*words.length)];
-    headline.value=pick.join("\n");
-    subtitle.value=["A STUDY IN CREATIVE CHAOS","GOOD IDEAS DON'T SIT STILL","EXPERIMENT / EXPLORE / REPEAT","A LITTLE LOUDER EVERY DAY"][Math.floor(Math.random()*4)];
-    microcopy.value="ISSUE "+String(Math.ceil(Math.random()*99)).padStart(3,"0")+" / FIELD NOTES";
-    paletteIndex=Math.floor(Math.random()*palettes.length);
-    layout=["stack","split","center"][Math.floor(Math.random()*3)];
-    $("fontChoice").value=["black","grotesk","mono"][Math.floor(Math.random()*3)];
-    $("shapeChoice").value=["star","circle","bars","none"][Math.floor(Math.random()*4)];
-    $("inkToggle").checked=Math.random()>.72;
-    update(); $("status").textContent="A fresh composition. Make it yours.";
-  }
-  $("randomButton").addEventListener("click",randomise);
-  $("randomTop").addEventListener("click",randomise);
-  function downloadPNG(){
-    const c=palettes[paletteIndex], w=1080,h=1350;
-    const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
-    const ctx=canvas.getContext("2d");
-    const inverted=$("inkToggle").checked, bg=inverted?c.ink:c.bg, ink=inverted?c.paper:c.ink;
-    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
-    if($("grainToggle").checked){ctx.fillStyle=inverted?"#ffffff12":"#17171712";for(let y=0;y<h;y+=13)for(let x=0;x<w;x+=13){ctx.beginPath();ctx.arc(x,y,1.1,0,Math.PI*2);ctx.fill();}}
-    if($("borderToggle").checked){ctx.strokeStyle=ink;ctx.lineWidth=8;ctx.strokeRect(35,35,w-70,h-70);}
-    ctx.fillStyle=ink;ctx.textBaseline="top";
-    const mono='"DM Mono", monospace', black='"Archivo Black", Impact, sans-serif', grotesk='"Space Grotesk", sans-serif';
-    const font=$("fontChoice").value==="mono"?mono:$("fontChoice").value==="grotesk"?grotesk:black;
-    ctx.font=`24px ${mono}`;ctx.fillText(microcopy.value.slice(0,55),75,72);ctx.textAlign="right";ctx.fillText("PP—001",1005,72);ctx.textAlign="left";
-    const shape=$("shapeChoice").value;
-    if(shape==="star"){ctx.fillStyle=c.accent;ctx.font=`180px ${grotesk}`;ctx.textAlign="right";ctx.fillText("✳",970,260);ctx.textAlign="left";}
-    if(shape==="circle"){ctx.fillStyle=c.accent;ctx.beginPath();ctx.arc(825,520,190,0,Math.PI*2);ctx.fill();}
-    if(shape==="bars"){ctx.fillStyle=c.accent;for(let i=0;i<5;i++)ctx.fillRect(720,330+i*75,290,35);}
-    const lines=headline.value.toUpperCase().split(/\n/).slice(0,3);
-    const center=layout==="center";
-    ctx.textAlign=center?"center":"left";
-    const x=center?w/2:75, base=layout==="split"?430:490;
-    let fontSize=layout==="split"?142:172;
-    if($("fontChoice").value==="mono")fontSize=layout==="split"?118:140;
-    if($("fontChoice").value==="grotesk")fontSize=layout==="split"?145:170;
-    const maxWidth=layout==="split"?760:930;
-    ctx.font=`800 ${fontSize}px ${font}`;
-    while(lines.some(line=>ctx.measureText(line).width>maxWidth)&&fontSize>70){fontSize-=6;ctx.font=`800 ${fontSize}px ${font}`;}
-    ctx.fillStyle=ink;
-    lines.forEach((line,i)=>ctx.fillText(line, x, base+i*fontSize*.88, maxWidth));
-    ctx.font=`700 28px ${mono}`;ctx.fillText(subtitle.value.toUpperCase().slice(0,70),x,base+lines.length*fontSize*.9+35);
-    ctx.textAlign="left";ctx.font=`22px ${mono}`;ctx.fillText("POSTER PLAYGROUND",75,1250);
-    ctx.textAlign="right";ctx.fillStyle=c.accent;ctx.font=`800 72px ${black}`;ctx.fillText("001",1005,1210);
-    const a=document.createElement("a");a.download="poster-playground-design.png";a.href=canvas.toDataURL("image/png");a.click();
-    $("status").textContent="PNG exported. Go make something.";
-  }
-  $("downloadButton").addEventListener("click",downloadPNG);
-  update();
+const $=id=>document.getElementById(id), poster=$('poster');
+const palettes=[
+['#f4b8d2','#171717','#3457e8'],['#3457e8','#fff8eb','#ff8b45'],['#f5df4d','#171717','#f04e37'],['#bcb4f5','#171717','#d5f28c'],['#e85d3f','#fff1d6','#252525'],['#d8e7dc','#173f35','#e4a83e'],['#f0e4d2','#262626','#b64b36'],['#111111','#f4f0e6','#d5f04b'],['#f5a6a6','#432b58','#f4d35e'],['#b7d8f2','#14213d','#fca311'],['#d6c8ae','#5b3924','#e77b35'],['#f1eee7','#242424','#7777d8'],['#c9d8a8','#273b2c','#e3a5a0'],['#f7c65b','#3b2f2f','#f16a43'],['#d7c4f2','#242038','#9adbc5'],['#f0eee9','#111111','#111111']
+];
+const paletteNames=['CANDY','PRIMARY','SUNSET','LAVENDER','TOMATO','BOTANICAL','PAPER','ACID','POP','SPORT','EARTH','STUDIO','GARDEN','CITRUS','DREAM','BLACK & WHITE'];
+const palettesEl=$('palettes'); palettes.forEach((p,i)=>{const b=document.createElement('button');b.className='palette'+(i===0?' active':'');b.dataset.palette=i;b.setAttribute('aria-label',paletteNames[i]+' palette');b.innerHTML=`<i style="--sw1:${p[0]};--sw2:${p[1]};--sw3:${p[2]}"></i><b>${String(i+1).padStart(2,'0')} ${paletteNames[i]}</b>`;palettesEl.appendChild(b)});
+let paletteIndex=0;
+const fields=['headline','subtitle','microcopy','kicker','layoutChoice','alignChoice','fontChoice','scaleChoice','caseChoice','shapeChoice','shapeSize','textureChoice','borderToggle','inkToggle','footerToggle'];
+function safe(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function update(){const raw=$('headline').value,mode=$('caseChoice').value,txt=mode==='uppercase'?raw.toUpperCase():mode==='lowercase'?raw.toLowerCase():raw;$('posterHeadline').innerHTML=safe(txt).replace(/\n/g,'<br>');$('posterSubtitle').textContent=$('subtitle').value;$('posterMicro').textContent=$('microcopy').value;$('posterKicker').textContent=$('kicker').value;
+const c=palettes[paletteIndex];poster.style.backgroundColor=c[0];poster.style.color=c[1];poster.style.setProperty('--blue',c[2]);poster.className='poster layout-'+$('layoutChoice').value+' align-'+$('alignChoice').value+' font-'+$('fontChoice').value+' size-'+$('scaleChoice').value+( $('inkToggle').checked?' inverted':'')+( $('borderToggle').checked?'':' no-border')+( $('footerToggle').checked?'':' no-footer')+' texture-'+$('textureChoice').value;
+const shape=$('shapeChoice').value,el=$('posterShape');el.className='poster-shape '+(shape==='none'?'':`shape-${shape}`);el.textContent=shape==='star'?'✳':shape==='cross'?'✚':'';el.style.display=shape==='none'?'none':'block';el.style.transform=$('shapeSize').value==='small'?'scale(.65)':$('shapeSize').value==='large'?'scale(1.3)':'';
+document.querySelectorAll('.palette').forEach((b,i)=>b.classList.toggle('active',i===paletteIndex));}
+fields.forEach(id=>$(id).addEventListener('input',update));palettesEl.addEventListener('click',e=>{const b=e.target.closest('[data-palette]');if(!b)return;paletteIndex=+b.dataset.palette;update()});
+const presetMap={brutal:{p:7,l:'stack',f:'black',s:'checker',t:'grain',a:'left'},editorial:{p:6,l:'left',f:'playfair',s:'circle',t:'paper',a:'left'},gig:{p:4,l:'diagonal',f:'anton',s:'sun',t:'grain',a:'center'},minimal:{p:11,l:'center',f:'grotesk',s:'none',t:'clean',a:'center'},retro:{p:13,l:'frame',f:'oswald',s:'star',t:'lines',a:'center'},playful:{p:0,l:'split',f:'marker',s:'cross',t:'dots',a:'left'},modern:{p:9,l:'bottom',f:'grotesk',s:'rings',t:'clean',a:'left'},mono:{p:15,l:'vertical',f:'mono',s:'bars',t:'paper',a:'left'}};
+$('presets').addEventListener('click',e=>{const b=e.target.closest('[data-preset]');if(!b)return;const v=presetMap[b.dataset.preset];paletteIndex=v.p;$('layoutChoice').value=v.l;$('fontChoice').value=v.f;$('shapeChoice').value=v.s;$('textureChoice').value=v.t;$('alignChoice').value=v.a;document.querySelectorAll('.preset').forEach(x=>x.classList.toggle('active',x===b));update();$('status').textContent=b.textContent+' preset loaded. Now make it yours.'});
+function randomise(){const heads=['MAKE\nSOME NOISE','STAY\nCURIOUS','IDEAS IN\nMOTION','NOTHING\nORDINARY','CREATE\nMORE','FUTURE\nUNKNOWN','GOOD\nENERGY','OFF THE\nGRID','FORM\nFOLLOWS FUN','NO MORE\nMAYBES'];const subs=['A STUDY IN CREATIVE CHAOS','GOOD IDEAS DO NOT SIT STILL','EXPERIMENT / EXPLORE / REPEAT','A LITTLE LOUDER EVERY DAY','AN UNOFFICIAL FIELD GUIDE','PRINTED MATTER FOR THE CURIOUS'];$('headline').value=heads[Math.floor(Math.random()*heads.length)];$('subtitle').value=subs[Math.floor(Math.random()*subs.length)];$('microcopy').value='ISSUE '+String(1+Math.floor(Math.random()*99)).padStart(3,'0')+' / FIELD NOTES';paletteIndex=Math.floor(Math.random()*palettes.length);$('layoutChoice').value=['stack','split','center','left','bottom','vertical','frame','diagonal'][Math.floor(Math.random()*8)];$('alignChoice').value=['left','center','right'][Math.floor(Math.random()*3)];$('fontChoice').value=['black','anton','oswald','grotesk','playfair','marker','mono'][Math.floor(Math.random()*7)];$('scaleChoice').value=['small','medium','large','huge'][Math.floor(Math.random()*4)];$('shapeChoice').value=['star','circle','rings','bars','checker','cross','sun','none'][Math.floor(Math.random()*8)];$('textureChoice').value=['grain','dots','lines','paper','clean'][Math.floor(Math.random()*5)];$('status').textContent='Fresh chaos generated. Tweak anything you like.';update()}
+$('randomButton').addEventListener('click',randomise);$('randomTop').addEventListener('click',randomise);
+function download(){const c=palettes[paletteIndex],w=1080,h=1350,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d'),inv=$('inkToggle').checked,bg=inv?'#171717':c[0],ink=inv?'#fff8eb':c[1],accent=c[2];x.fillStyle=bg;x.fillRect(0,0,w,h);
+const texture=$('textureChoice').value;if(texture==='dots'||texture==='grain'){x.fillStyle=inv?'#ffffff18':'#17171718';for(let yy=0;yy<h;yy+=texture==='dots'?12:15)for(let xx=0;xx<w;xx+=texture==='dots'?12:15){x.beginPath();x.arc(xx,yy,texture==='dots'?2:1,0,Math.PI*2);x.fill()}}else if(texture==='lines'){x.fillStyle=inv?'#ffffff12':'#17171712';for(let yy=0;yy<h;yy+=9)x.fillRect(0,yy,w,2)}else if(texture==='paper'){x.strokeStyle=inv?'#ffffff10':'#17171710';for(let yy=0;yy<h;yy+=22){x.beginPath();x.moveTo(0,yy);x.lineTo(w,h-yy);x.stroke()}}
+if($('borderToggle').checked){x.strokeStyle=ink;x.lineWidth=7;x.strokeRect(38,38,w-76,h-76)}
+x.fillStyle=ink;x.textBaseline='top';const mono='DM Mono, monospace',fontMap={black:'Archivo Black',anton:'Anton',oswald:'Oswald',grotesk:'Space Grotesk',playfair:'Playfair Display',marker:'Permanent Marker',mono:'DM Mono'},font=fontMap[$('fontChoice').value];x.font=`25px ${mono}`;x.fillText($('microcopy').value.slice(0,65),75,75);x.textAlign='right';x.fillText('PP—001',1005,75);x.textAlign='left';
+const shape=$('shapeChoice').value;x.fillStyle=accent;if(shape==='circle'||shape==='rings'||shape==='sun'){x.beginPath();x.arc(835,450,shape==='sun'?180:150,0,Math.PI*2);if(shape==='rings'){x.lineWidth=18;x.strokeStyle=accent;x.stroke()}else x.fill()}else if(shape==='bars'||shape==='checker'){for(let i=0;i<5;i++){if(shape==='bars')x.fillRect(750,300+i*72,250,35);else for(let j=0;j<4;j++)if((i+j)%2===0)x.fillRect(750+i*55,300+j*55,55,55)}}else if(shape==='star'||shape==='cross'){x.font=`190px ${font}`;x.textAlign='right';x.fillText(shape==='star'?'✳':'✚',990,250);x.textAlign='left'}
+let lines=$('headline').value.split('\n').slice(0,4);const caseMode=$('caseChoice').value;lines=lines.map(t=>caseMode==='uppercase'?t.toUpperCase():caseMode==='lowercase'?t.toLowerCase():t);let size={small:100,medium:135,large:170,huge:205}[$('scaleChoice').value];if($('layoutChoice').value==='vertical')size=120;const align=$('alignChoice').value;x.textAlign=align==='center'?'center':align==='right'?'right':'left';let xx=align==='center'?540:align==='right'?1005:75,yy=$('layoutChoice').value==='bottom'?760:$('layoutChoice').value==='split'?480:500;if($('layoutChoice').value==='vertical'){x.save();x.translate(180,yy);x.rotate(Math.PI/2);x.textAlign='left';xx=0;yy=0}
+x.fillStyle=ink;x.font=`${size}px "${font}"`;while(lines.some(t=>x.measureText(t).width>920)&&size>55){size-=7;x.font=`${size}px "${font}"`}lines.forEach((t,i)=>x.fillText(t,xx,yy+i*size*.9,930));if($('layoutChoice').value==='vertical')x.restore();x.textAlign=align==='center'?'center':align==='right'?'right':'left';x.font=`28px ${mono}`;x.fillStyle=ink;x.fillText($('subtitle').value.toUpperCase().slice(0,90),xx,yy+lines.length*size*.9+35,930);
+if($('footerToggle').checked){x.textAlign='left';x.fillStyle=ink;x.font=`22px ${mono}`;x.fillText('POSTER PLAYGROUND',75,1250);x.textAlign='right';x.fillStyle=accent;x.font='bold 72px Archivo Black';x.fillText('001',1005,1205)}const a=document.createElement('a');a.download='poster-playground-design.png';a.href=cv.toDataURL('image/png');a.click();$('status').textContent='PNG exported — ready for the wall.'}
+$('downloadButton').addEventListener('click',download);
+$('resetButton').addEventListener('click',()=>{location.reload()});update();
 })();

@@ -1,120 +1,27 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#c8edb5">
-  <meta name="description" content="Poster Playground — a tiny experimental poster design studio.">
-  <title>Poster Playground — Design Studio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#e8e4d8">
+<meta name="description" content="Poster Playground — an experimental poster design studio."><title>Poster Playground — Design Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&family=Anton&family=Playfair+Display:wght@700;800&family=Permanent+Marker&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head>
 <body>
-  <div class="top-strip"><span>PP—001 / EXPERIMENTAL DESIGN TOOL</span><span>MADE TO MAKE THINGS</span></div>
-  <header class="header">
-    <a class="brand" href="#" aria-label="Poster Playground home">P<span>✳</span>P</a>
-    <div class="header-title"><span class="eyebrow">A TINY DESIGN STUDIO</span><strong>POSTER PLAYGROUND</strong></div>
-    <button class="button button-dark" id="randomTop">SURPRISE ME ↗</button>
-  </header>
-
-  <main class="app-shell">
-    <section class="intro">
-      <p class="eyebrow">01 / THE CANVAS IS YOURS</p>
-      <h1>Make a little<br><em>noise.</em></h1>
-      <p>Build loud, graphic posters from a few words, a handful of shapes and absolutely no design degree required.</p>
-    </section>
-
-    <section class="workspace" aria-label="Poster editor">
-      <aside class="controls">
-        <div class="panel-heading"><span>THE TOOLBOX</span><span class="counter">01—05</span></div>
-
-        <section class="control-group">
-          <div class="group-title"><span>01 / YOUR WORDS</span><span>✎</span></div>
-          <label for="headline">Main headline</label>
-          <textarea id="headline" rows="2" maxlength="48">MAKE
-IT LOUD</textarea>
-          <label for="subtitle">Subtitle</label>
-          <input id="subtitle" maxlength="70" value="A POSTER ABOUT BIG IDEAS">
-          <label for="microcopy">Small detail</label>
-          <input id="microcopy" maxlength="55" value="ISSUE 001 / EXPERIMENT NO. 01">
-        </section>
-
-        <section class="control-group">
-          <div class="group-title"><span>02 / COLOUR STORY</span><span>◉</span></div>
-          <div class="palette-grid" id="palettes">
-            <button class="palette active" data-palette="0" aria-label="Pink green blue palette"><i style="--sw1:#f4b8d2;--sw2:#c8edb5;--sw3:#3457e8"></i><b>01</b></button>
-            <button class="palette" data-palette="1" aria-label="Blue orange cream palette"><i style="--sw1:#3457e8;--sw2:#ff8b45;--sw3:#fff5df"></i><b>02</b></button>
-            <button class="palette" data-palette="2" aria-label="Yellow red black palette"><i style="--sw1:#f5df4d;--sw2:#f04e37;--sw3:#171717"></i><b>03</b></button>
-            <button class="palette" data-palette="3" aria-label="Lavender green black palette"><i style="--sw1:#bcb4f5;--sw2:#d5f28c;--sw3:#171717"></i><b>04</b></button>
-          </div>
-        </section>
-
-        <section class="control-group">
-          <div class="group-title"><span>03 / COMPOSITION</span><span>▦</span></div>
-          <div class="layout-options" id="layouts">
-            <button class="choice active" data-layout="stack">STACKED</button>
-            <button class="choice" data-layout="split">SPLIT</button>
-            <button class="choice" data-layout="center">CENTER</button>
-          </div>
-          <label for="fontChoice">Type style</label>
-          <select id="fontChoice">
-            <option value="black">HEAVY / DISPLAY</option>
-            <option value="grotesk">GROTESK / BOLD</option>
-            <option value="mono">MONO / TECHNICAL</option>
-          </select>
-          <label for="shapeChoice">Graphic element</label>
-          <select id="shapeChoice">
-            <option value="star">BURST STAR</option>
-            <option value="circle">GIANT CIRCLE</option>
-            <option value="bars">BOLD BARS</option>
-            <option value="none">NO EXTRA SHAPE</option>
-          </select>
-        </section>
-
-        <section class="control-group">
-          <div class="group-title"><span>04 / EXTRA DETAILS</span><span>✳</span></div>
-          <label class="toggle-row"><span>Show border</span><input type="checkbox" id="borderToggle" checked><i></i></label>
-          <label class="toggle-row"><span>Show grain</span><input type="checkbox" id="grainToggle" checked><i></i></label>
-          <label class="toggle-row"><span>Invert ink</span><input type="checkbox" id="inkToggle"><i></i></label>
-        </section>
-
-        <section class="control-group">
-          <div class="group-title"><span>05 / MAKE IT YOURS</span><span>↗</span></div>
-          <button class="button button-pink full" id="randomButton">RANDOMISE DESIGN ↻</button>
-          <button class="button button-blue full" id="downloadButton">DOWNLOAD PNG ↓</button>
-          <p class="hint" id="status" aria-live="polite">Your poster updates as you edit.</p>
-        </section>
-      </aside>
-
-      <section class="preview-area">
-        <div class="preview-top"><span>LIVE PREVIEW / 1080 × 1350</span><span class="live"><i></i> LIVE</span></div>
-        <div class="poster-wrap">
-          <div class="poster layout-stack" id="poster">
-            <div class="poster-grain"></div>
-            <div class="poster-border"></div>
-            <div class="poster-meta"><span id="posterMicro">ISSUE 001 / EXPERIMENT NO. 01</span><span>PP—001</span></div>
-            <div class="poster-shape shape-star" id="posterShape">✳</div>
-            <div class="poster-copy">
-              <div class="poster-kicker">A STUDY IN MAKING</div>
-              <h2 id="posterHeadline">MAKE<br>IT LOUD</h2>
-              <p id="posterSubtitle">A POSTER ABOUT BIG IDEAS</p>
-            </div>
-            <div class="poster-footer"><span>POSTER PLAYGROUND</span><strong>001</strong></div>
-          </div>
-        </div>
-        <div class="preview-bottom"><span>✳ EXPERIMENT. BREAK. REPEAT.</span><span>DESIGNED BY YOU.</span></div>
-      </section>
-    </section>
-
-    <section class="bottom-note">
-      <span class="eyebrow">A NOTE FROM THE STUDIO</span>
-      <p>There are no wrong answers. Just compositions you haven't tried yet.</p>
-      <span class="mono">POSTER PLAYGROUND / VERSION 1.0</span>
-    </section>
-  </main>
-  <footer><span>PP✳</span><span>AN INDEPENDENT LITTLE CREATIVE TOOL</span><span>2026</span></footer>
-  <script src="script.js"></script>
-</body>
-</html>
+<div class="top-strip"><span>PP—001 / EXPERIMENTAL DESIGN TOOL</span><span>MAKE SOMETHING WORTH LOOKING AT</span></div>
+<header class="header"><a class="brand" href="#">P<span>✳</span>P</a><div class="header-title"><span class="eyebrow">YOUR PERSONAL DESIGN STUDIO</span><strong>POSTER PLAYGROUND <small>v2.0</small></strong></div><button class="button button-dark" id="randomTop">SURPRISE ME ↗</button></header>
+<main class="app-shell">
+<section class="intro"><p class="eyebrow">01 / THE CANVAS IS YOURS</p><h1>Make a little<br><em>noise.</em></h1><p>Mix type, colour, shapes and texture. Break the rules. Make posters that look like they belong on a wall.</p></section>
+<section class="workspace" aria-label="Poster editor">
+<aside class="controls"><div class="panel-heading"><span>THE TOOLBOX</span><span class="counter">01—08</span></div>
+<section class="control-group"><div class="group-title"><span>01 / WORDS</span><span>✎</span></div><label for="headline">Main headline</label><textarea id="headline" rows="2" maxlength="60">MAKE\nIT LOUD</textarea><label for="subtitle">Subtitle</label><input id="subtitle" maxlength="90" value="A POSTER ABOUT BIG IDEAS"><label for="microcopy">Top line / small detail</label><input id="microcopy" maxlength="65" value="ISSUE 001 / EXPERIMENT NO. 01"><label for="kicker">Kicker</label><input id="kicker" maxlength="45" value="A STUDY IN MAKING"></section>
+<section class="control-group"><div class="group-title"><span>02 / QUICK START</span><span>✳</span></div><div class="preset-grid" id="presets"><button class="preset active" data-preset="brutal">BRUTAL</button><button class="preset" data-preset="editorial">EDITORIAL</button><button class="preset" data-preset="gig">GIG POSTER</button><button class="preset" data-preset="minimal">MINIMAL</button><button class="preset" data-preset="retro">RETRO</button><button class="preset" data-preset="playful">PLAYFUL</button><button class="preset" data-preset="modern">MODERN</button><button class="preset" data-preset="mono">MONO</button></div></section>
+<section class="control-group"><div class="group-title"><span>03 / COLOUR LIBRARY</span><span>◉</span></div><div class="palette-grid" id="palettes"></div></section>
+<section class="control-group"><div class="group-title"><span>04 / COMPOSITION</span><span>▦</span></div><label for="layoutChoice">Layout</label><select id="layoutChoice"><option value="stack">STACKED — bold title</option><option value="split">SPLIT — offset composition</option><option value="center">CENTER — symmetrical</option><option value="left">LEFT — editorial</option><option value="bottom">BOTTOM — low placement</option><option value="vertical">VERTICAL — tall type</option><option value="frame">FRAME — boxed title</option><option value="diagonal">DIAGONAL — dynamic</option></select><label for="alignChoice">Text alignment</label><select id="alignChoice"><option value="left">LEFT</option><option value="center">CENTER</option><option value="right">RIGHT</option></select></section>
+<section class="control-group"><div class="group-title"><span>05 / TYPOGRAPHY</span><span>Aa</span></div><label for="fontChoice">Typeface</label><select id="fontChoice"><option value="black">ARCHIVO BLACK — heavy</option><option value="anton">ANTON — condensed</option><option value="oswald">OSWALD — tall</option><option value="grotesk">SPACE GROTESK — clean</option><option value="playfair">PLAYFAIR — elegant</option><option value="marker">PERMANENT MARKER — rough</option><option value="mono">DM MONO — technical</option></select><label for="scaleChoice">Headline size</label><select id="scaleChoice"><option value="small">SMALL</option><option value="medium">MEDIUM</option><option value="large" selected>LARGE</option><option value="huge">EXTRA LARGE</option></select><label for="caseChoice">Letter case</label><select id="caseChoice"><option value="uppercase">UPPERCASE</option><option value="original">As typed</option><option value="lowercase">lowercase</option></select></section>
+<section class="control-group"><div class="group-title"><span>06 / GRAPHICS</span><span>✳</span></div><label for="shapeChoice">Main graphic</label><select id="shapeChoice"><option value="star">BURST STAR</option><option value="circle">GIANT CIRCLE</option><option value="rings">TARGET RINGS</option><option value="bars">BOLD BARS</option><option value="checker">CHECKERBOARD</option><option value="cross">CROSS MARK</option><option value="sun">SUNBURST</option><option value="none">NONE</option></select><label for="shapeSize">Graphic scale</label><select id="shapeSize"><option value="small">SMALL</option><option value="medium" selected>MEDIUM</option><option value="large">LARGE</option></select></section>
+<section class="control-group"><div class="group-title"><span>07 / FINISHING</span><span>✳</span></div><label for="textureChoice">Texture</label><select id="textureChoice"><option value="grain">PRINT GRAIN</option><option value="dots">HALFTONE DOTS</option><option value="lines">SCAN LINES</option><option value="paper">PAPER</option><option value="clean">CLEAN</option></select><label class="toggle-row"><span>Poster border</span><input type="checkbox" id="borderToggle" checked><i></i></label><label class="toggle-row"><span>Invert colours</span><input type="checkbox" id="inkToggle"><i></i></label><label class="toggle-row"><span>Show footer</span><input type="checkbox" id="footerToggle" checked><i></i></label></section>
+<section class="control-group"><div class="group-title"><span>08 / EXPORT</span><span>↗</span></div><button class="button button-pink full" id="randomButton">RANDOMISE EVERYTHING ↻</button><button class="button button-blue full" id="downloadButton">DOWNLOAD PNG ↓</button><button class="button button-light full" id="resetButton">RESET DESIGN ↺</button><p class="hint" id="status" aria-live="polite">Your poster updates as you edit.</p></section>
+</aside>
+<section class="preview-area"><div class="preview-top"><span>LIVE PREVIEW / 1080 × 1350</span><span class="live"><i></i> LIVE</span></div><div class="poster-wrap"><div class="poster layout-stack" id="poster"><div class="poster-texture" id="posterTexture"></div><div class="poster-border" id="posterBorder"></div><div class="poster-meta"><span id="posterMicro">ISSUE 001 / EXPERIMENT NO. 01</span><span>PP—001</span></div><div class="poster-shape shape-star" id="posterShape">✳</div><div class="poster-copy"><div class="poster-kicker" id="posterKicker">A STUDY IN MAKING</div><h2 id="posterHeadline">MAKE<br>IT LOUD</h2><p id="posterSubtitle">A POSTER ABOUT BIG IDEAS</p></div><div class="poster-footer" id="posterFooter"><span>POSTER PLAYGROUND</span><strong>001</strong></div></div></div><div class="preview-bottom"><span>✳ EXPERIMENT. BREAK. REPEAT.</span><span>DESIGNED BY YOU.</span></div></section>
+</section>
+<section class="bottom-note"><span class="eyebrow">A NOTE FROM THE STUDIO</span><p>There are no wrong answers. Just compositions you haven't tried yet.</p><span class="mono">POSTER PLAYGROUND / VERSION 2.0</span></section></main><footer><span>PP✳</span><span>AN INDEPENDENT LITTLE CREATIVE TOOL</span><span>2026</span></footer><script src="script.js"></script></body></html>
